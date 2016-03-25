@@ -21,10 +21,13 @@ class OracleOfBacon
 
   def from_does_not_equal_to
     # YOUR CODE HERE
+    errors.add(:base, 'From cannot be the same sa To') if @from == @to
   end
 
   def initialize(api_key='')
     # your code here
+    @api_key = api_key
+    @from = @to = 'Kevin Bacon'
   end
 
   def find_connections
