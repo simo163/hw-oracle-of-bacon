@@ -47,6 +47,9 @@ class OracleOfBacon
   def make_uri_from_arguments
     # your code here: set the @uri attribute to properly-escaped URI
     #   constructed from the @from, @to, @api_key arguments
+    @uri = "http://oracleofbacon.org/cgi-bin/xml?"
+    @uri += "p=#{@api_key}&a=#{@from}&b=#{@to}"
+    @uri = URI.escape(@uri)
   end
       
   class Response
@@ -73,18 +76,22 @@ class OracleOfBacon
         parse_unknown_response
       end
     end
+
     def parse_error_response
       @type = :error
       @data = 'Unauthorized access'
     end
+
     def parse_graph_response
       @type = :graph
       @data = @doc.xpath('/link').children.select(&:element?).map {|ele| ele.text.strip}
     end
+
     def parse_spellcheck_response
       @type = :spellcheck
       @data = @doc.xpath('/spellcheck').children.map {|ele| ele.text.strip}.reject(&:blank?)
     end
+
     def parse_unknown_response
       @type = :unknown
       @data = 'unknown response type'
